@@ -33,7 +33,7 @@ export function Header({ user }: HeaderProps) {
   const avatarSrc = getAvatarByRole(user);
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0">
+    <header className="h-30 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0">
       <div className="flex items-center gap-6">
         {/* Branch Selector */}
         <div className="flex items-center gap-2 cursor-pointer hover:bg-slate-50 p-2 rounded-md transition-colors">
@@ -72,7 +72,7 @@ export function Header({ user }: HeaderProps) {
             <img
               src={avatarSrc}
               alt={user?.name ?? 'Usuario'}
-              className="w-8 h-8 rounded-full object-cover"
+              className="w-18 h-18 rounded-full object-cover"
             />
           ) : (
             <UserCircle size={32} className="text-slate-400" />
