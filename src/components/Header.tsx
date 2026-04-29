@@ -1,6 +1,37 @@
 import { Calendar, ChevronDown, MapPin, UserCircle } from 'lucide-react';
+import type { UserProfile } from '../types/user';
 
-export function Header() {
+interface HeaderProps {
+  user: UserProfile | null;
+}
+
+const roleAvatarMap: Record<string, string> = {
+  gerente: '/avatars/gerente.png',
+  gerencia: '/avatars/gerente.png',
+  supervisor: '/avatars/supervisor.png',
+  vendedor: '/avatars/vendedor.png',
+};
+
+const getAvatarByRole = (user: UserProfile | null) => {
+  if (!user) {
+    return null;
+  }
+
+  const normalizedRole = user.role
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+  const matchingRole = Object.keys(roleAvatarMap).find((role) =>
+    normalizedRole.includes(role)
+  );
+
+  return matchingRole ? roleAvatarMap[matchingRole] : user.avatarUrl ?? null;
+};
+
+export function Header({ user }: HeaderProps) {
+  const avatarSrc = getAvatarByRole(user);
+
   return (
     <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0">
       <div className="flex items-center gap-6">
@@ -29,10 +60,23 @@ export function Header() {
         {/* User Profile */}
         <div className="flex items-center gap-3 pl-4 border-l border-slate-200 cursor-pointer">
           <div className="text-right hidden sm:block">
-            <div className="text-sm font-semibold text-slate-800 leading-none mb-1">Admin User</div>
-            <div className="text-xs text-slate-500 leading-none">Gerencia Comercial</div>
+            <div className="text-sm font-semibold text-slate-800 leading-none mb-1">
+              {user?.name ?? 'Usuario'}
+            </div>
+            <div className="text-xs text-slate-500 leading-none">
+              {user?.role ?? 'Sin cargo'}
+            </div>
           </div>
-          <UserCircle size={32} className="text-slate-400" />
+
+          {avatarSrc ? (
+            <img
+              src={avatarSrc}
+              alt={user?.name ?? 'Usuario'}
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          ) : (
+            <UserCircle size={32} className="text-slate-400" />
+          )}
         </div>
       </div>
     </header>

@@ -1,3 +1,5 @@
+import type { UserProfile } from '../types/user';
+
 export interface KpiSummary {
   ventasTotales: number;
   margenUtilidad: number;
@@ -34,6 +36,15 @@ export interface Alert {
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const mockApi = {
+  getCurrentUser: async (): Promise<UserProfile> => {
+    await delay(300);
+
+    return {
+      id: '1',
+      name: 'Admin User',
+      role: 'supervisor',
+    };
+  },
   getSummary: async (): Promise<KpiSummary> => {
     await delay(500);
     return {
